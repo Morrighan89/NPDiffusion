@@ -9,8 +9,8 @@ def main():
 	Ny                     = 300    # resolution y-dir
 	rho0                   = 0.1e-12    # average density outside injection site
 	rho1				   = 10	  # average density initial injection
-	tau                    = 0.590   # collision timescale D 3.3e-11
-	Nt                     = 3024   # number of timesteps dt 600 s
+	tau                    = 1.094   # collision timescale D 3.3e-11
+	Nt                     = 28801   # number of timesteps dt 60 s
 	plotRealTime = True # switch on for plotting as the simulation goes along
 	
 	# Lattice speeds / weights
@@ -30,7 +30,7 @@ def main():
 	# Initial injection site
 	X, Y = np.meshgrid(range(Nx), range(Ny))
 
-	spot = (X - Nx/2)**2 + (Y - Ny/2)**2 < (Nx/20)**2
+	spot = Y>225
 	for i in idxs:
 		F[spot,i] = rho1*weights[i]#*F[cylinder,i]
 	
@@ -77,7 +77,7 @@ def main():
 
 		
 		# plot in real time - color 1/2 particles blue, other half red
-		if (plotRealTime and (it % 1000) == 0) or (it == Nt-1):
+		if (plotRealTime and (it % 1440) == 0) or (it == Nt-1):
 			plt.cla()
 			rho = np.sum(F,2)
 			rho[reflectiveBoundary] = np.nan
@@ -86,7 +86,7 @@ def main():
 			contours = plt.contour(X, Y, rho, levels=[1.e-4,1.e-2,1.e-1,1], colors='black')
 			plt.clabel(contours, inline=True, fontsize=18)
 			plt.imshow(rho, cmap='bwr')
-			np.savetxt(f"Conc_tau{tau}_t{it:04d}.txt",rho)
+			np.savetxt(f"Conc_tau{tau}_t{it:04d}b.txt",rho)
 			#plt.clim(0,15)
 			ax = plt.gca()
 			ax.invert_yaxis()
