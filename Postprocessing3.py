@@ -48,15 +48,15 @@ class Dist:
             self.rho = np.loadtxt(filename, comments="#")
 
 def main():
-    tau=1.094
+    tau=1.4
     mainDir="W:\\Git\\NPDiffusion\\"
-    #timeInstants=[1000,2000,3000]
-    timeInstants=[60,240,1440,2880,10080,20160]
+    timeInstants=[1000,2000,3000]
+    #timeInstants=[240,2880,10080]
     datas=[]
     for ti in timeInstants:
-        datas.append(Dist(f"{mainDir}Conc_tau{tau}_t{ti:04d}b.txt"))
+        datas.append(Dist(f"{mainDir}Conc_tau{tau}_t{ti:04d}.txt"))
     X, Y = np.meshgrid(range(100), range(300))
-    fig, axes=plt.subplots(len(timeInstants),2,figsize=(6, 18.3))
+    fig, axes=plt.subplots(len(timeInstants),2,figsize=(6, 9.3))
     ylim=(0,10)
     for ti, data, ax in zip(timeInstants,datas,axes):
         cmap = copy.copy(mpl.cm.get_cmap("bwr"))
@@ -83,13 +83,13 @@ def main():
         ax[0].set_ylabel("C mg/mL")
         ax[0].set_xlabel("r mm")
         #ax[0].set_title(f"time = {int(ti/1000)} week")
-        ax[0].set_title(f"time = {int(ti/60)} hour")
+        ax[0].set_title(f"time = {int(ti/60)} min")
         if int(ti/60)>48:
             ax[0].set_title(f"time = {int(ti/60/24)} days")
     fig.suptitle(f'$ \mathrm{{D}} = 3.3e^{{-11}} \mathrm{{m}}^2/\mathrm{{s}}$', fontsize=20)
     fig.tight_layout(pad=0.6, w_pad=0.0001, h_pad=0.1)
     
-    fig.savefig(f"Conc_tau{tau}b.png",dpi=1000)
+    fig.savefig(f"Conc_tau{tau}flow_pres.png",dpi=1000)
     
     plt.show()
     return 0
